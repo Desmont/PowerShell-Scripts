@@ -676,9 +676,9 @@ Function PreFlight-Checks {
     
         #Check the PSVersion
         $script:ProgressPoint = 201
-        if ($global:PSVersionTable.PSVersion.Major -ne 4 -and !$NoPSVersionCheck) {
+        if ($global:PSVersionTable.PSVersion.Major -ne 5 -and !$NoPSVersionCheck) {
             $script:ProgressPoint = 202
-            Write-Warning "This script is designed for PowerShell v4.0. Behaviour on other versions is untested."
+            Write-Warning "This script is designed for PowerShell v5.0. Behaviour on other versions is untested."
             Write-Warning "To override version check, specify parameter -NoPSVersionCheck."
             $script:WarningCount = $script:WarningCount + 1
             Cleanup
@@ -795,7 +795,7 @@ Function PreFlight-Checks {
 # ---------------------------------------------------------------------------------------------------------------------------
 # Function to locate the boot disk on the source VM, check it is not shared and mount it.
 # ---------------------------------------------------------------------------------------------------------------------------
-Function Locate-SourceBootDisk ([Microsoft.HyperV.PowerShell.VirtualMachine] $VM, [Ref] $SourceBootDiskPath) {
+Function Locate-SourceBootDisk ($VM, [Ref] $SourceBootDiskPath) {
     
     try {
         $script:ProgressPoint = 300
@@ -1056,7 +1056,7 @@ Function Validate-SourceWindowsInstallation ( [String] $BootDiskFileName, `
 
         # Validate that the source is Windows version 6.2 or later (6.2 is Windows 8/Windows Server 2012)
         $script:ProgressPoint = 672
-        if ($SourceOSVersionParts[0] -lt 6) { CleanUp "Source OS must be version 6.2 (Windows 8/Windows Server 2012) or later." }
+        if (($SourceOSVersionParts[0] -lt 6) -and ($SourceOSVersionParts[0] -ne 10)) { CleanUp "Source OS must be version 6.2 (Windows 8/Windows Server 2012) or later." }
         $script:ProgressPoint = 673
         if (($SourceOSVersionParts[0] -eq 6) -and ($SourceOSVersionParts[1] -lt 2)) { CleanUp "Source OS must be version 6.2 (Windows 8/Windows Server 2012) or later." }
 
